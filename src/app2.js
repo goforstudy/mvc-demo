@@ -1,10 +1,12 @@
 import $ from "jquery";
 import "./app2.css";
+import Model from "./base/Model";
 const eventBus = $({});
 
 const localKey = 'app2.index';
 // 数据放置到m
-const m = {
+const m = new Model(
+    {
     data: {
         index: parseInt( localStorage.getItem(localKey) || 0),
     },
@@ -15,9 +17,10 @@ const m = {
         eventBus.trigger('m:updated');
         localStorage.setItem(localKey, data.index)
     }
-}
-// 视图放置到v
-const v = {
+})
+
+// 其他为c
+const view = {
     el: null,
     html: (index) => { return `
     <div>
@@ -32,28 +35,21 @@ const v = {
     </div>
     `
     },
-    init(el){
-       v.el = $(el);
-    },
     render (index) {
-        if(v.el.children.length !== 0){
-            v.el.empty()
+        if(view.el.children.length !== 0){
+            view.el.empty()
         }
-        $(v.html(parseInt(index))).prependTo($(v.el))
+        $(view.html(parseInt(index))).prependTo($(view.el))
         
-    }
-}
-
-// 其他为c
-const c = {
+    },
     init(el) {
-        v.init(el);
-        v.render(m.data.index);
-        c.autoBindEvents();
+        view.el = $(el);
+        view.render(m.data.index);
+        view.autoBindEvents();
         eventBus.on(
             'm:updated',
             () => {
-                v.render(m.data.index);
+                view.render(m.data.index);
             }
         )
     },
@@ -65,12 +61,12 @@ const c = {
         m.update({index: index})
     },
     autoBindEvents() {
-        Object.keys(c.events).forEach(
+        Object.keys(view.events).forEach(
             item => {
                 const arr = item.split(' ');
-                v.el.on(arr[0], arr[1], c[c.events[item]]);
+                view.el.on(arr[0], arr[1], view[view.events[item]]);
             }
         )
     }
 }
-export default c;
+export default view;

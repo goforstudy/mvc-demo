@@ -11294,7 +11294,72 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"C:/Users/11827/AppData/Local/Yarn/Data/global/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"app1.js":[function(require,module,exports) {
+},{"_css_loader":"C:/Users/11827/AppData/Local/Yarn/Data/global/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"base/Model.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Model = /*#__PURE__*/function () {
+  function Model(options) {
+    var _this = this;
+
+    _classCallCheck(this, Model);
+
+    ['data', 'update', 'create', 'delete', 'get'].forEach(function (key) {
+      if (key in options) {
+        _this[key] = options[key];
+      }
+    });
+    this.data = options.data;
+    this.update = options.update;
+  }
+
+  _createClass(Model, [{
+    key: "create",
+    value: function create() {
+      var _console, _console$error;
+
+      // ?. 可选链
+      (_console = console) === null || _console === void 0 ? void 0 : (_console$error = _console.error) === null || _console$error === void 0 ? void 0 : _console$error.call(_console, "未实现 create");
+    }
+  }, {
+    key: "delete",
+    value: function _delete() {
+      var _console2, _console2$error;
+
+      (_console2 = console) === null || _console2 === void 0 ? void 0 : (_console2$error = _console2.error) === null || _console2$error === void 0 ? void 0 : _console2$error.call(_console2, "未实现 delete");
+    }
+  }, {
+    key: "update",
+    value: function update(data) {
+      var _console3, _console3$error;
+
+      (_console3 = console) === null || _console3 === void 0 ? void 0 : (_console3$error = _console3.error) === null || _console3$error === void 0 ? void 0 : _console3$error.call(_console3, "未实现 update");
+    }
+  }, {
+    key: "get",
+    value: function get() {
+      var _console4, _console4$error;
+
+      (_console4 = console) === null || _console4 === void 0 ? void 0 : (_console4$error = _console4.error) === null || _console4$error === void 0 ? void 0 : _console4$error.call(_console4, "未实现 get");
+    }
+  }]);
+
+  return Model;
+}();
+
+var _default = Model;
+exports.default = _default;
+},{}],"app1.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11306,48 +11371,44 @@ var _jquery = _interopRequireWildcard(require("jquery"));
 
 require("./app1.css");
 
+var _Model = _interopRequireDefault(require("./base/Model"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 var eventBus = (0, _jquery.default)({}); // 数据放置到m
 
-var m = {
+var m = new _Model.default({
   data: {
     n: parseInt(localStorage.getItem("n"))
   },
-  create: function create() {},
-  delete: function _delete() {},
   update: function update(data) {
     Object.assign(m.data, data);
     eventBus.trigger('m:updated');
     localStorage.setItem('n', data.n);
   }
-}; // 视图放置到v
+}); // 其他为c
 
-var v = {
+var view = {
   el: null,
-  html: "\n    <div>\n        <div class=\"output\">\n            <span id=\"number\">{{n}}</span>\n        </div>\n        <div>\n            <button id=\"add1\">+1</button>\n            <button id=\"minus1\">-1</button>\n            <button id=\"mul2\">*2</button>\n            <button id=\"divide2\">\xF72</button>\n        </div>\n    </div>\n    ",
+  html: "\n    <div>\n        <div class=\"output\">\n            <span id=\"number\">{{n}}</span>\n        </div>\n        <div>\n            <button id=\"add1\">+1</button>\n            <button id=\"minus1\">-1</button>\n            <button id=\"mul2\">*2</button>\n            <button id=\"div\">\xF72</button>\n        </div>\n    </div>\n    ",
   init: function init(el) {
-    v.el = (0, _jquery.default)(el);
+    view.el = (0, _jquery.default)(el);
+    view.render(m.data.n);
+    view.autoBindEvents();
+    eventBus.on('m:updated', function () {
+      view.render(m.data.n);
+    });
   },
   render: function render(n) {
-    if (v.el.children.length !== 0) {
-      v.el.empty();
+    if (view.el.children.length !== 0) {
+      view.el.empty();
     }
 
-    (0, _jquery.default)(v.html.replace('{{n}}', n)).prependTo((0, _jquery.default)(v.el));
-  }
-}; // 其他为c
-
-var c = {
-  init: function init(el) {
-    v.init(el);
-    v.render(m.data.n);
-    c.autoBindEvents();
-    eventBus.on('m:updated', function () {
-      v.render(m.data.n);
-    });
+    (0, _jquery.default)(view.html.replace('{{n}}', n)).prependTo((0, _jquery.default)(view.el));
   },
   events: {
     'click #add1': 'add',
@@ -11376,15 +11437,15 @@ var c = {
     });
   },
   autoBindEvents: function autoBindEvents() {
-    Object.keys(c.events).forEach(function (item) {
+    Object.keys(view.events).forEach(function (item) {
       var arr = item.split(' ');
-      v.el.on(arr[0], arr[1], c[c.events[item]]);
+      view.el.on(arr[0], arr[1], view[view.events[item]]);
     });
   }
 };
-var _default = c;
+var _default = view;
 exports.default = _default;
-},{"jquery":"../node_modules/jquery/dist/jquery.js","./app1.css":"app1.css"}],"app2.css":[function(require,module,exports) {
+},{"jquery":"../node_modules/jquery/dist/jquery.js","./app1.css":"app1.css","./base/Model":"base/Model.js"}],"app2.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -11401,12 +11462,14 @@ var _jquery = _interopRequireDefault(require("jquery"));
 
 require("./app2.css");
 
+var _Model = _interopRequireDefault(require("./base/Model"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var eventBus = (0, _jquery.default)({});
 var localKey = 'app2.index'; // 数据放置到m
 
-var m = {
+var m = new _Model.default({
   data: {
     index: parseInt(localStorage.getItem(localKey) || 0)
   },
@@ -11417,32 +11480,26 @@ var m = {
     eventBus.trigger('m:updated');
     localStorage.setItem(localKey, data.index);
   }
-}; // 视图放置到v
+}); // 其他为c
 
-var v = {
+var view = {
   el: null,
   html: function html(index) {
     return "\n    <div>\n        <ol class=\"tab-bar\">\n            <li class=\"".concat(index === 0 ? 'selected' : '', "\" data-index=0>1</li>\n            <li class=\"").concat(index === 1 ? 'selected' : '', "\" data-index=1>2</li>\n        </ol>\n        <ul class=\"tab-content\">\n            <li class=").concat(index === 0 ? 'active' : '', ">\u5185\u5BB9\u4E00</li>\n            <li class=").concat(index === 1 ? 'active' : '', ">\u5185\u5BB9\u4E8C</li>\n        </ul>\n    </div>\n    ");
   },
-  init: function init(el) {
-    v.el = (0, _jquery.default)(el);
-  },
   render: function render(index) {
-    if (v.el.children.length !== 0) {
-      v.el.empty();
+    if (view.el.children.length !== 0) {
+      view.el.empty();
     }
 
-    (0, _jquery.default)(v.html(parseInt(index))).prependTo((0, _jquery.default)(v.el));
-  }
-}; // 其他为c
-
-var c = {
+    (0, _jquery.default)(view.html(parseInt(index))).prependTo((0, _jquery.default)(view.el));
+  },
   init: function init(el) {
-    v.init(el);
-    v.render(m.data.index);
-    c.autoBindEvents();
+    view.el = (0, _jquery.default)(el);
+    view.render(m.data.index);
+    view.autoBindEvents();
     eventBus.on('m:updated', function () {
-      v.render(m.data.index);
+      view.render(m.data.index);
     });
   },
   events: {
@@ -11455,15 +11512,15 @@ var c = {
     });
   },
   autoBindEvents: function autoBindEvents() {
-    Object.keys(c.events).forEach(function (item) {
+    Object.keys(view.events).forEach(function (item) {
       var arr = item.split(' ');
-      v.el.on(arr[0], arr[1], c[c.events[item]]);
+      view.el.on(arr[0], arr[1], view[view.events[item]]);
     });
   }
 };
-var _default = c;
+var _default = view;
 exports.default = _default;
-},{"jquery":"../node_modules/jquery/dist/jquery.js","./app2.css":"app2.css"}],"app3.css":[function(require,module,exports) {
+},{"jquery":"../node_modules/jquery/dist/jquery.js","./app2.css":"app2.css","./base/Model":"base/Model.js"}],"app3.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -11560,7 +11617,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60415" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57865" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
