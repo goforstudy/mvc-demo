@@ -1,5 +1,8 @@
-class Model{
+import EventBus from "./EventBus";
+
+class Model extends EventBus{
     constructor(options){
+        super();
         ['data', 'update', 'create', 'delete', 'get'].forEach(
             key => {
                 if(key in options){
